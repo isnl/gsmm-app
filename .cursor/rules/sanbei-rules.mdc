@@ -1,0 +1,21 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+## 项目介绍
+
+这是一个安卓端app项目 
+技术栈：uniapp + uni-ui + vue3 + ts + setup语法 + unocss
+## 编码要求
+组件尽量使用 uni-ui 组件库，如果不合适，再自己写
+样式完全使用unocss语法，例如: <view class="w-full h-full"></view>，不用出现除过unocss或tailwindcss以外的class命名，特殊情况下必须要写class的除外
+声明ts类型，尽量在vue组件import语法段落的下面
+
+## 颜色主题
+主题色：#01bd8d
+label颜色： #666666
+value颜色： #333333
+边框颜色：#eee
+

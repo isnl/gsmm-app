@@ -1,0 +1,3721 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "http://192.168.0.4:9390/api",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/system/users/{id}": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "findById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/UpdateUserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "deleteById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/users/{id}/reset_password": {
+      "put": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "resetPassword",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/users/change_password": {
+      "put": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "changePassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/roles/{id}": {
+      "get": {
+        "tags": [
+          "role-controller"
+        ],
+        "operationId": "findRoleById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "role-controller"
+        ],
+        "operationId": "updateRole",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRoleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "role-controller"
+        ],
+        "operationId": "deleteRoleById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/dictionaries/{id}": {
+      "put": {
+        "tags": [
+          "dictionary-controller"
+        ],
+        "operationId": "updateDictionary",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDictionaryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "dictionary-controller"
+        ],
+        "operationId": "deleteById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/dictionaries/{id}/items/{itemId}": {
+      "put": {
+        "tags": [
+          "dictionary-controller"
+        ],
+        "operationId": "updateItem",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDictionaryItemRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "dictionary-controller"
+        ],
+        "operationId": "removeItem",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/departments/{id}": {
+      "get": {
+        "tags": [
+          "department-controller"
+        ],
+        "operationId": "findById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "department-controller"
+        ],
+        "operationId": "updateDepartment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDepartmentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "department-controller"
+        ],
+        "operationId": "deleteDepartment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dynamic_attribute_config/{id}": {
+      "get": {
+        "tags": [
+          "动态属性配置表"
+        ],
+        "summary": "动态属性配置表-根据id查询",
+        "operationId": "findById_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "动态属性配置表"
+        ],
+        "summary": "动态属性配置表-修改",
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDynamicAttributeConfigRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "动态属性配置表"
+        ],
+        "summary": "动态属性配置表-删除",
+        "operationId": "deleteById_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dynamic_attribute_config/{id}/is_active": {
+      "put": {
+        "tags": [
+          "动态属性配置表"
+        ],
+        "summary": "动态属性配置表-修改是否启用",
+        "operationId": "updateActive",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "isActive",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dynamic_attribute_category/{id}": {
+      "get": {
+        "tags": [
+          "动态属性类别"
+        ],
+        "summary": "动态属性类别-根据id查询",
+        "operationId": "findById_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "动态属性类别"
+        ],
+        "summary": "动态属性类别-修改",
+        "operationId": "update_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDynamicAttributeCategoryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "动态属性类别"
+        ],
+        "summary": "动态属性类别-删除",
+        "operationId": "deleteById_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/app/investigate/{id}": {
+      "put": {
+        "tags": [
+          "APP-调查"
+        ],
+        "summary": "APP-古树名木-修改",
+        "operationId": "update_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/UpdateAncientTreeRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ancient_tree/{id}": {
+      "get": {
+        "tags": [
+          "古树名木"
+        ],
+        "summary": "古树名木-根据id查询",
+        "operationId": "findById_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "古树名木"
+        ],
+        "summary": "古树名木-修改",
+        "operationId": "update_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/UpdateAncientTreeRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "古树名木"
+        ],
+        "summary": "古树名木-删除",
+        "operationId": "deleteById_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/users": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "findAll",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "roleId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "departmentId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "createUser",
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CreateUserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/roles": {
+      "get": {
+        "tags": [
+          "role-controller"
+        ],
+        "operationId": "findAllRoles",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "role-controller"
+        ],
+        "operationId": "createRole",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/roles/{id}/users": {
+      "post": {
+        "tags": [
+          "role-controller"
+        ],
+        "operationId": "addUsersRole",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUsersRoleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "role-controller"
+        ],
+        "operationId": "removeUsersRole",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUsersRoleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/dictionaries": {
+      "get": {
+        "tags": [
+          "dictionary-controller"
+        ],
+        "operationId": "findAll_1",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "dictionary-controller"
+        ],
+        "operationId": "createDictionary",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDictionaryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/dictionaries/{id}/items": {
+      "get": {
+        "tags": [
+          "dictionary-controller"
+        ],
+        "operationId": "findAllItems",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "dictionary-controller"
+        ],
+        "operationId": "addItem",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDictionaryItemRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/departments": {
+      "get": {
+        "tags": [
+          "department-controller"
+        ],
+        "operationId": "findAll_2",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "department-controller"
+        ],
+        "operationId": "createDepartment",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDepartmentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/demo": {
+      "post": {
+        "tags": [
+          "demo-controller"
+        ],
+        "operationId": "demo",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDemoRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/demo/upload": {
+      "post": {
+        "tags": [
+          "demo-controller"
+        ],
+        "operationId": "demoUpload",
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/DemoUploadRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/demo/geom": {
+      "post": {
+        "tags": [
+          "demo-controller"
+        ],
+        "operationId": "demoGeom",
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CreateDemoGeomRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/refresh_token": {
+      "post": {
+        "tags": [
+          "account-controller"
+        ],
+        "operationId": "refreshToken",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/logout": {
+      "post": {
+        "tags": [
+          "account-controller"
+        ],
+        "operationId": "logout",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "account-controller"
+        ],
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forgot": {
+      "post": {
+        "tags": [
+          "account-controller"
+        ],
+        "operationId": "forgot",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dynamic_attribute_config": {
+      "get": {
+        "tags": [
+          "动态属性配置表"
+        ],
+        "summary": "动态属性配置表-分页查询",
+        "operationId": "findPage",
+        "parameters": [
+          {
+            "name": "condition",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoryId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "动态属性配置表"
+        ],
+        "summary": "动态属性配置表-新增",
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDynamicAttributeConfigRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dynamic_attribute_category": {
+      "get": {
+        "tags": [
+          "动态属性类别"
+        ],
+        "summary": "动态属性类别-分页查询",
+        "operationId": "findPage_1",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "动态属性类别"
+        ],
+        "summary": "动态属性类别-新增",
+        "operationId": "create_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDynamicAttributeCategoryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/app/investigate": {
+      "post": {
+        "tags": [
+          "APP-调查"
+        ],
+        "summary": "APP-古树名木-新增",
+        "operationId": "create_2",
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CreateAncientTreeRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ancient_tree_growth": {
+      "post": {
+        "tags": [
+          "古树名木-生长数据"
+        ],
+        "summary": "古树名木-生长数据-新增",
+        "operationId": "create_3",
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CreateAncientTreeGrowthRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ancient_tree": {
+      "get": {
+        "tags": [
+          "古树名木"
+        ],
+        "summary": "古树名木-分页查询",
+        "operationId": "findPage_2",
+        "parameters": [
+          {
+            "name": "condition",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "areaCode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "healthStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "batch",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "deleted",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "古树名木"
+        ],
+        "summary": "古树名木-新增",
+        "operationId": "create_4",
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CreateAncientTreeRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/web/investigate": {
+      "get": {
+        "tags": [
+          "调查任务"
+        ],
+        "summary": "调查任务-分页查询",
+        "operationId": "findPage_3",
+        "parameters": [
+          {
+            "name": "condition",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "areaCode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "batch",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/web/investigate/{id}": {
+      "get": {
+        "tags": [
+          "调查任务"
+        ],
+        "summary": "调查任务-根据id查询",
+        "operationId": "findById_5",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/web/investigate/all": {
+      "get": {
+        "tags": [
+          "调查任务"
+        ],
+        "summary": "调查任务-全部",
+        "operationId": "findAll_3",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/menu": {
+      "get": {
+        "tags": [
+          "account-controller"
+        ],
+        "operationId": "userMenu",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/info": {
+      "get": {
+        "tags": [
+          "account-controller"
+        ],
+        "operationId": "userInfo",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/users/roles": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "findAllRoles_1",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/users/departments": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "findAllDepartments",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/users/account_number_exists": {
+      "get": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "accountNumberExists",
+        "parameters": [
+          {
+            "name": "accountNumber",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/roles/users": {
+      "get": {
+        "tags": [
+          "role-controller"
+        ],
+        "operationId": "findAllUsersByRoleId",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "roleId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "roleIdNe",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/log": {
+      "get": {
+        "tags": [
+          "log-controller"
+        ],
+        "operationId": "findPage_4",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "beginDate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "logType",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "operateType",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/common/user": {
+      "get": {
+        "tags": [
+          "common-controller"
+        ],
+        "operationId": "findUserByDepartmentId",
+        "parameters": [
+          {
+            "name": "departmentId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/common/district": {
+      "get": {
+        "tags": [
+          "common-controller"
+        ],
+        "operationId": "findTreeDistrict",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/common/district/geom": {
+      "get": {
+        "tags": [
+          "common-controller"
+        ],
+        "operationId": "findTreeDistrictGeom",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/common/dict": {
+      "get": {
+        "tags": [
+          "common-controller"
+        ],
+        "operationId": "findDictByCode",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/common/department": {
+      "get": {
+        "tags": [
+          "common-controller"
+        ],
+        "operationId": "findTreeDepartment",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/app/investigate/stats": {
+      "get": {
+        "tags": [
+          "APP-调查"
+        ],
+        "summary": "APP-调查-首页统计",
+        "operationId": "findStats",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/app/investigate/find/ancient_tree/all": {
+      "get": {
+        "tags": [
+          "APP-调查"
+        ],
+        "summary": "APP-调查-获取全量古树名木信息",
+        "operationId": "findAncientTreeAll",
+        "parameters": [
+          {
+            "name": "areaCode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UpdateUserRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "photos": {
+            "type": "string",
+            "format": "binary"
+          },
+          "name": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "nation": {
+            "type": "string"
+          },
+          "cellPhoneNumber": {
+            "type": "string"
+          },
+          "jobTitle": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "uniqueItems": true
+          },
+          "departmentId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "ChangePasswordRequest": {
+        "type": "object",
+        "properties": {
+          "oldPassword": {
+            "type": "string"
+          },
+          "newPassword": {
+            "type": "string"
+          },
+          "confirmPassword": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "confirmPassword",
+          "newPassword",
+          "oldPassword"
+        ]
+      },
+      "UpdateRoleRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "value": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "uniqueItems": true
+          }
+        }
+      },
+      "UpdateDictionaryRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "UpdateDictionaryItemRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "itemId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "itemId"
+        ]
+      },
+      "UpdateDepartmentRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sequenceNumber": {
+            "type": "number",
+            "format": "double"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "UpdateDynamicAttributeConfigRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "attributeKey": {
+            "type": "string",
+            "description": "属性键名（英文标识）",
+            "minLength": 1
+          },
+          "attributeName": {
+            "type": "string",
+            "description": "属性显示名称",
+            "minLength": 1
+          },
+          "attributeUnit": {
+            "type": "string",
+            "description": "属性显示单位"
+          },
+          "dataType": {
+            "type": "string",
+            "description": "数据类型（string(256)/int4/double/int8/text/date/boolean）",
+            "minLength": 1
+          },
+          "isRequired": {
+            "type": "boolean",
+            "description": "是否必填"
+          },
+          "defaultValue": {
+            "type": "string",
+            "description": "默认值"
+          },
+          "sortOrder": {
+            "type": "number",
+            "format": "double",
+            "description": "排序字段"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "是否启用"
+          },
+          "remark": {
+            "type": "string",
+            "description": "备注说明"
+          },
+          "validationRule": {
+            "type": "string",
+            "description": "验证规则(正则表达式)"
+          }
+        },
+        "required": [
+          "attributeKey",
+          "attributeName",
+          "dataType",
+          "id",
+          "isActive",
+          "isRequired"
+        ]
+      },
+      "UpdateDynamicAttributeCategoryRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "description": "属性分类名称",
+            "minLength": 1
+          },
+          "sortOrder": {
+            "type": "number",
+            "format": "double",
+            "description": "排序字段"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "Coordinate": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number",
+            "format": "double"
+          },
+          "y": {
+            "type": "number",
+            "format": "double"
+          },
+          "z": {
+            "type": "number",
+            "format": "double"
+          },
+          "valid": {
+            "type": "boolean"
+          },
+          "m": {
+            "type": "number",
+            "format": "double"
+          },
+          "coordinate": {
+            "$ref": "#/components/schemas/Coordinate",
+            "writeOnly": true
+          }
+        }
+      },
+      "JsonNode": {},
+      "JsonbFile": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "screenshotPath": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateAncientTreeRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "treeSpecies": {
+            "type": "string",
+            "description": "树种名称",
+            "minLength": 1
+          },
+          "treeCode": {
+            "type": "string",
+            "description": "古树唯一编号",
+            "minLength": 1
+          },
+          "commonName": {
+            "type": "string",
+            "description": "俗名/当地俗称"
+          },
+          "latinName": {
+            "type": "string",
+            "description": "拉丁学名"
+          },
+          "family": {
+            "type": "string",
+            "description": "科"
+          },
+          "genus": {
+            "type": "string",
+            "description": "属"
+          },
+          "estimatedAge": {
+            "type": "integer",
+            "format": "int32",
+            "description": "估测树龄(年)"
+          },
+          "ownershipUnit": {
+            "type": "string",
+            "description": "权属单位/管理单位"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Coordinate",
+            "description": "纬度经度坐标"
+          },
+          "healthStatus": {
+            "type": "string",
+            "description": "健康状况(优/良/中/差)"
+          },
+          "growthEnvironment": {
+            "type": "string",
+            "description": "生长环境详细描述"
+          },
+          "historicalAnecdotes": {
+            "type": "string",
+            "description": "历史典故/传说"
+          },
+          "treeHeight": {
+            "type": "number",
+            "format": "double",
+            "description": "树高(米)"
+          },
+          "diameterAtBreastHeight": {
+            "type": "number",
+            "format": "double",
+            "description": "胸径(厘米)"
+          },
+          "protectionLevel": {
+            "type": "string",
+            "description": "保护等级(一级/二级/三级)"
+          },
+          "isRareSpecies": {
+            "type": "boolean",
+            "description": "是否稀有物种"
+          },
+          "discoveryDate": {
+            "type": "string",
+            "format": "date",
+            "description": "发现/登记日期"
+          },
+          "deleted": {
+            "type": "boolean",
+            "description": "软删除标记"
+          },
+          "areaCode": {
+            "type": "string",
+            "description": "所属行政区划代码"
+          },
+          "batch": {
+            "type": "string",
+            "description": "批次"
+          },
+          "investigatorId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "调查人员ID"
+          },
+          "area": {
+            "type": "number",
+            "description": "面积(平方米)"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "description": "数量(株)"
+          },
+          "town": {
+            "type": "string",
+            "description": "乡（镇）"
+          },
+          "village": {
+            "type": "string",
+            "description": "村"
+          },
+          "smallPlaceName": {
+            "type": "string",
+            "description": "小地名"
+          },
+          "altitude": {
+            "type": "number",
+            "description": "海拔(米)"
+          },
+          "protectionType": {
+            "type": "string",
+            "description": "保护类型/等级(例：保护植物/国家Ⅰ级保护植物)"
+          },
+          "crownWidth": {
+            "type": "number",
+            "description": "冠幅(米)"
+          },
+          "underBranchHeight": {
+            "type": "number",
+            "description": "枝下高(米)"
+          },
+          "baseDiameter": {
+            "type": "number",
+            "description": "基径(厘米)"
+          },
+          "landType": {
+            "type": "string",
+            "description": "地类"
+          },
+          "soilTexture": {
+            "type": "string",
+            "description": "土壤质地"
+          },
+          "slope": {
+            "type": "string",
+            "description": "坡度(平坡/缓坡)"
+          },
+          "aspect": {
+            "type": "string",
+            "description": "坡向(度)"
+          },
+          "slopePosition": {
+            "type": "string",
+            "description": "坡位(河谷平地/下坡位等)"
+          },
+          "relocationPlace": {
+            "type": "string",
+            "description": "迁出地"
+          },
+          "siteConditionDesc": {
+            "type": "string",
+            "description": "立地条件描述"
+          },
+          "protectionMeasureType": {
+            "type": "string",
+            "description": "现有保护措施(迁地保护/就地保护)"
+          },
+          "relocationProtection": {
+            "type": "string",
+            "description": "迁地保护/就地保护技术措施"
+          },
+          "managementMeasures": {
+            "type": "string",
+            "description": "管护措施"
+          },
+          "projectSchedule": {
+            "type": "string",
+            "description": "工程进度安排"
+          },
+          "laborStatistics": {
+            "type": "string",
+            "description": "用工量统计"
+          },
+          "investmentEstimate": {
+            "type": "number",
+            "description": "投资概算(元)"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/JsonNode",
+            "description": "动态字段JSON对象"
+          },
+          "multimedia": {
+            "type": "array",
+            "description": "多媒体资料JSON数组，存储照片/视频路径",
+            "items": {
+              "type": "string",
+              "format": "binary"
+            }
+          },
+          "multimedia_": {
+            "type": "array",
+            "description": "多媒体资料JSON数组，存储照片/视频路径",
+            "items": {
+              "$ref": "#/components/schemas/JsonbFile"
+            }
+          },
+          "investigateAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "location",
+          "treeCode",
+          "treeSpecies"
+        ]
+      },
+      "CreateUserRequest": {
+        "type": "object",
+        "properties": {
+          "photos": {
+            "type": "string",
+            "format": "binary"
+          },
+          "name": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "nation": {
+            "type": "string"
+          },
+          "cellPhoneNumber": {
+            "type": "string"
+          },
+          "jobTitle": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "uniqueItems": true
+          },
+          "departmentId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "accountNumber": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "accountNumber",
+          "departmentId",
+          "name",
+          "roles"
+        ]
+      },
+      "CreateRoleRequest": {
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "value": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": [
+          "name",
+          "pid",
+          "value"
+        ]
+      },
+      "UpdateUsersRoleRequest": {
+        "type": "object",
+        "properties": {
+          "userIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
+      "CreateDictionaryRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "name"
+        ]
+      },
+      "CreateDictionaryItemRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "key",
+          "value"
+        ]
+      },
+      "CreateDepartmentRequest": {
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sequenceNumber": {
+            "type": "number",
+            "format": "double"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "pid",
+          "sequenceNumber",
+          "type"
+        ]
+      },
+      "CreateDemoRequest": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "dateTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DemoUploadRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "binary"
+            }
+          }
+        }
+      },
+      "CoordinateSequence": {
+        "type": "object",
+        "properties": {
+          "dimension": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "measures": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "CoordinateSequenceFactory": {},
+      "CreateDemoGeomRequest": {
+        "type": "object",
+        "properties": {
+          "coordinate": {
+            "$ref": "#/components/schemas/Coordinate"
+          },
+          "geom": {
+            "$ref": "#/components/schemas/Geometry"
+          },
+          "point": {
+            "$ref": "#/components/schemas/Point"
+          }
+        }
+      },
+      "Envelope": {
+        "type": "object",
+        "properties": {
+          "null": {
+            "type": "boolean"
+          },
+          "height": {
+            "type": "number",
+            "format": "double"
+          },
+          "diameter": {
+            "type": "number",
+            "format": "double"
+          },
+          "width": {
+            "type": "number",
+            "format": "double"
+          },
+          "area": {
+            "type": "number",
+            "format": "double"
+          },
+          "minX": {
+            "type": "number",
+            "format": "double"
+          },
+          "minY": {
+            "type": "number",
+            "format": "double"
+          },
+          "maxX": {
+            "type": "number",
+            "format": "double"
+          },
+          "maxY": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "Geometry": {
+        "type": "object",
+        "properties": {
+          "envelope": {},
+          "factory": {
+            "$ref": "#/components/schemas/GeometryFactory"
+          },
+          "userData": {},
+          "length": {
+            "type": "number",
+            "format": "double"
+          },
+          "empty": {
+            "type": "boolean"
+          },
+          "valid": {
+            "type": "boolean"
+          },
+          "simple": {
+            "type": "boolean"
+          },
+          "srid": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "area": {
+            "type": "number",
+            "format": "double"
+          },
+          "geometryType": {
+            "type": "string"
+          },
+          "precisionModel": {
+            "$ref": "#/components/schemas/PrecisionModel"
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Coordinate"
+            }
+          },
+          "numPoints": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rectangle": {
+            "type": "boolean"
+          },
+          "centroid": {
+            "$ref": "#/components/schemas/Point"
+          },
+          "interiorPoint": {
+            "$ref": "#/components/schemas/Point"
+          },
+          "dimension": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "boundary": {},
+          "boundaryDimension": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "numGeometries": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "envelopeInternal": {
+            "$ref": "#/components/schemas/Envelope"
+          },
+          "coordinate": {
+            "$ref": "#/components/schemas/Coordinate"
+          }
+        }
+      },
+      "GeometryFactory": {
+        "type": "object",
+        "properties": {
+          "precisionModel": {
+            "$ref": "#/components/schemas/PrecisionModel"
+          },
+          "coordinateSequenceFactory": {
+            "$ref": "#/components/schemas/CoordinateSequenceFactory"
+          },
+          "srid": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Point": {
+        "type": "object",
+        "properties": {
+          "envelope": {},
+          "factory": {
+            "$ref": "#/components/schemas/GeometryFactory"
+          },
+          "userData": {},
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Coordinate"
+            }
+          },
+          "empty": {
+            "type": "boolean"
+          },
+          "simple": {
+            "type": "boolean"
+          },
+          "x": {
+            "type": "number",
+            "format": "double"
+          },
+          "y": {
+            "type": "number",
+            "format": "double"
+          },
+          "geometryType": {
+            "type": "string"
+          },
+          "numPoints": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dimension": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "boundary": {},
+          "boundaryDimension": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "coordinateSequence": {
+            "$ref": "#/components/schemas/CoordinateSequence"
+          },
+          "coordinate": {
+            "$ref": "#/components/schemas/Coordinate"
+          },
+          "length": {
+            "type": "number",
+            "format": "double"
+          },
+          "valid": {
+            "type": "boolean"
+          },
+          "srid": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "area": {
+            "type": "number",
+            "format": "double"
+          },
+          "precisionModel": {
+            "$ref": "#/components/schemas/PrecisionModel"
+          },
+          "rectangle": {
+            "type": "boolean"
+          },
+          "centroid": {},
+          "interiorPoint": {},
+          "numGeometries": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "envelopeInternal": {
+            "$ref": "#/components/schemas/Envelope"
+          }
+        }
+      },
+      "PrecisionModel": {
+        "type": "object",
+        "properties": {
+          "scale": {
+            "type": "number",
+            "format": "double"
+          },
+          "type": {
+            "$ref": "#/components/schemas/Type"
+          },
+          "floating": {
+            "type": "boolean"
+          },
+          "maximumSignificantDigits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "offsetX": {
+            "type": "number",
+            "format": "double"
+          },
+          "offsetY": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "Type": {},
+      "RefreshTokenRequest": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "accountNumber": {
+            "type": "string",
+            "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "accountNumber",
+          "password"
+        ]
+      },
+      "CreateDynamicAttributeConfigRequest": {
+        "type": "object",
+        "properties": {
+          "categoryId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "属性分类id"
+          },
+          "attributeKey": {
+            "type": "string",
+            "description": "属性键名（英文标识）",
+            "minLength": 1
+          },
+          "attributeName": {
+            "type": "string",
+            "description": "属性显示名称",
+            "minLength": 1
+          },
+          "attributeUnit": {
+            "type": "string",
+            "description": "属性显示单位"
+          },
+          "dataType": {
+            "type": "string",
+            "description": "数据类型（string(256)/int4/double/int8/text/date/boolean）",
+            "minLength": 1
+          },
+          "isRequired": {
+            "type": "boolean",
+            "description": "是否必填"
+          },
+          "defaultValue": {
+            "type": "string",
+            "description": "默认值"
+          },
+          "sortOrder": {
+            "type": "number",
+            "format": "double",
+            "description": "排序字段"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "是否启用"
+          },
+          "remark": {
+            "type": "string",
+            "description": "备注说明"
+          },
+          "validationRule": {
+            "type": "string",
+            "description": "验证规则(正则表达式)"
+          }
+        },
+        "required": [
+          "attributeKey",
+          "attributeName",
+          "categoryId",
+          "dataType",
+          "isActive",
+          "isRequired"
+        ]
+      },
+      "CreateDynamicAttributeCategoryRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "属性分类名称",
+            "minLength": 1
+          },
+          "sortOrder": {
+            "type": "number",
+            "format": "double",
+            "description": "排序字段"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "CreateAncientTreeRequest": {
+        "type": "object",
+        "properties": {
+          "treeSpecies": {
+            "type": "string",
+            "description": "树种名称",
+            "minLength": 1
+          },
+          "treeCode": {
+            "type": "string",
+            "description": "古树唯一编号",
+            "minLength": 1
+          },
+          "commonName": {
+            "type": "string",
+            "description": "俗名/当地俗称"
+          },
+          "latinName": {
+            "type": "string",
+            "description": "拉丁学名"
+          },
+          "family": {
+            "type": "string",
+            "description": "科"
+          },
+          "genus": {
+            "type": "string",
+            "description": "属"
+          },
+          "estimatedAge": {
+            "type": "integer",
+            "format": "int32",
+            "description": "估测树龄(年)"
+          },
+          "ownershipUnit": {
+            "type": "string",
+            "description": "权属单位/管理单位"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Coordinate",
+            "description": "纬度经度坐标"
+          },
+          "healthStatus": {
+            "type": "string",
+            "description": "健康状况(优/良/中/差)"
+          },
+          "multimedia": {
+            "type": "array",
+            "description": "多媒体资料JSON数组，存储照片/视频路径",
+            "items": {
+              "type": "string",
+              "format": "binary"
+            }
+          },
+          "growthEnvironment": {
+            "type": "string",
+            "description": "生长环境详细描述"
+          },
+          "historicalAnecdotes": {
+            "type": "string",
+            "description": "历史典故/传说"
+          },
+          "treeHeight": {
+            "type": "number",
+            "format": "double",
+            "description": "树高(米)"
+          },
+          "diameterAtBreastHeight": {
+            "type": "number",
+            "format": "double",
+            "description": "胸径(厘米)"
+          },
+          "protectionLevel": {
+            "type": "string",
+            "description": "保护等级(一级/二级/三级)"
+          },
+          "isRareSpecies": {
+            "type": "boolean",
+            "description": "是否稀有物种"
+          },
+          "discoveryDate": {
+            "type": "string",
+            "format": "date",
+            "description": "发现/登记日期"
+          },
+          "deleted": {
+            "type": "boolean",
+            "description": "软删除标记"
+          },
+          "areaCode": {
+            "type": "string",
+            "description": "所属行政区划代码"
+          },
+          "batch": {
+            "type": "string",
+            "description": "批次"
+          },
+          "investigatorId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "调查人员ID"
+          },
+          "area": {
+            "type": "number",
+            "description": "面积(平方米)"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "description": "数量(株)"
+          },
+          "town": {
+            "type": "string",
+            "description": "乡（镇）"
+          },
+          "village": {
+            "type": "string",
+            "description": "村"
+          },
+          "smallPlaceName": {
+            "type": "string",
+            "description": "小地名"
+          },
+          "altitude": {
+            "type": "number",
+            "description": "海拔(米)"
+          },
+          "protectionType": {
+            "type": "string",
+            "description": "保护类型/等级(例：保护植物/国家Ⅰ级保护植物)"
+          },
+          "crownWidth": {
+            "type": "number",
+            "description": "冠幅(米)"
+          },
+          "underBranchHeight": {
+            "type": "number",
+            "description": "枝下高(米)"
+          },
+          "baseDiameter": {
+            "type": "number",
+            "description": "基径(厘米)"
+          },
+          "landType": {
+            "type": "string",
+            "description": "地类"
+          },
+          "soilTexture": {
+            "type": "string",
+            "description": "土壤质地"
+          },
+          "slope": {
+            "type": "string",
+            "description": "坡度(平坡/缓坡)"
+          },
+          "aspect": {
+            "type": "string",
+            "description": "坡向(度)"
+          },
+          "slopePosition": {
+            "type": "string",
+            "description": "坡位(河谷平地/下坡位等)"
+          },
+          "relocationPlace": {
+            "type": "string",
+            "description": "迁出地"
+          },
+          "siteConditionDesc": {
+            "type": "string",
+            "description": "立地条件描述"
+          },
+          "protectionMeasureType": {
+            "type": "string",
+            "description": "现有保护措施(迁地保护/就地保护)"
+          },
+          "relocationProtection": {
+            "type": "string",
+            "description": "迁地保护/就地保护技术措施"
+          },
+          "managementMeasures": {
+            "type": "string",
+            "description": "管护措施"
+          },
+          "projectSchedule": {
+            "type": "string",
+            "description": "工程进度安排"
+          },
+          "laborStatistics": {
+            "type": "string",
+            "description": "用工量统计"
+          },
+          "investmentEstimate": {
+            "type": "number",
+            "description": "投资概算(元)"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/JsonNode",
+            "description": "动态字段JSON对象"
+          },
+          "investigateAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "location",
+          "treeCode",
+          "treeSpecies"
+        ]
+      },
+      "CreateAncientTreeGrowthRequest": {
+        "type": "object",
+        "properties": {
+          "treeId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "关联的古树ID"
+          },
+          "recordDate": {
+            "type": "string",
+            "format": "date",
+            "description": "记录日期"
+          },
+          "treeHeight": {
+            "type": "number",
+            "format": "double",
+            "description": "树高(米)"
+          },
+          "diameterAtBreastHeight": {
+            "type": "number",
+            "format": "double",
+            "description": "胸径(厘米)"
+          },
+          "crownWidth": {
+            "type": "number",
+            "description": "冠幅(米)"
+          },
+          "underBranchHeight": {
+            "type": "number",
+            "description": "枝下高(米)"
+          },
+          "baseDiameter": {
+            "type": "number",
+            "description": "基径(厘米)"
+          },
+          "healthStatus": {
+            "type": "string",
+            "description": "健康状况(优/良/中/差)"
+          },
+          "multimedia": {
+            "type": "array",
+            "description": "多媒体资料JSON数组，存储照片/视频路径",
+            "items": {
+              "type": "string",
+              "format": "binary"
+            }
+          }
+        },
+        "required": [
+          "treeId"
+        ]
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

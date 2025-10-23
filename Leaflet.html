@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaflet 天地图演示</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <!-- Leaflet JavaScript -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      width: 100%;
+      height: 100vh;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="map"></div>
+
+  <script>
+    // 初始化地图，设置中心点和缩放级别
+    const map = L.map('map').setView([39.908, 116.397], 12);
+
+    // 天地图需要使用token，请替换为您的天地图应用token
+    const tiandituKey = "64a7440068a2bbc276c11927b54458f4";
+
+    // 添加天地图影像底图
+    const tiandituImg = L.tileLayer('https://t{s}.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=' + tiandituKey, {
+      subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'],
+      maxZoom: 18
+    });
+
+    // 添加天地图影像注记
+    const tiandituCia = L.tileLayer('https://t{s}.tianditu.gov.cn/cia_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cia&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=' + tiandituKey, {
+      subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'],
+      maxZoom: 18
+    });
+
+    const imgGroup = L.layerGroup([tiandituImg, tiandituCia]);
+    imgGroup.addTo(map);
+
+  </script>
+</body>
+
+</html>
