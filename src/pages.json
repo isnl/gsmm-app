@@ -1,6 +1,5 @@
 {
-  "pages": [
-    {
+  "pages": [{
       "path": "pages/map/index",
       "style": {
         "navigationStyle": "custom",
@@ -10,6 +9,61 @@
           },
           "bounce": "none"
         }
+      }
+    },
+    {
+      "path": "pages/ancient_tree/index",
+      "style": {
+        "navigationBarTitleText": "新增古树"
+      }
+    },
+    {
+      "path": "pages/ancient_tree/treeList",
+      "style": {
+        "navigationBarTitleText": "古树调查列表"
+      }
+    },
+    {
+      "path": "pages/ancient_tree/detail",
+      "style": {
+        "navigationBarTitleText": "古树详情"
+      }
+    },
+    {
+      "path": "pages/ancient_tree_cluster/index",
+      "style": {
+        "navigationBarTitleText": "新增古树群"
+      }
+    },
+    {
+      "path": "pages/ancient_tree_cluster/detail",
+      "style": {
+        "navigationBarTitleText": "古树群详情"
+      }
+    },
+    {
+      "path": "pages/ancient_tree_cluster/selectLocation",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "选择点位"
+      }
+    },
+    {
+      "path": "pages/ancient_tree_cluster_sample/index",
+      "style": {
+        "navigationBarTitleText": "新增样方调查"
+      }
+    },
+    {
+      "path": "pages/ancient_tree_cluster_sample/detail",
+      "style": {
+        "navigationBarTitleText": "样方调查详情"
+      }
+    },
+    {
+      "path": "pages/ancient_tree_cluster_sample/addSampleTree",
+      "style": {
+        "navigationBarTitleText": "新增古树信息"
       }
     },
     {
@@ -49,8 +103,7 @@
     "selectedColor": "#01bd8d",
     "borderStyle": "black",
     "backgroundColor": "#ffffff",
-    "list": [
-      {
+    "list": [{
         "pagePath": "pages/map/index",
         "iconPath": "static/tabs/map.png",
         "selectedIconPath": "static/tabs/map-active.png",

@@ -13,6 +13,10 @@
       :change:currentLocation="renderjs.receiveCurrentLocation"
       :fitToLayerId="fitToLayerId"
       :change:fitToLayerId="renderjs.receiveFitToLayerId"
+      :isDrawing="isDrawing"
+      :change:isDrawing="renderjs.receiveDrawingMode"
+      :undoTrigger="undoTrigger"
+      :change:undoTrigger="renderjs.receiveUndoTrigger"
       ref="mapContainer"
       class="renderjs w-full h-full z-0"
     ></view>
@@ -24,7 +28,7 @@
     </view>
     <view
       :style="locationStyle"
-      class="absolute right-10px top-100px gap-3px w-46px h-46px bg-#fff shadow-[0px_0px_12px_1px_rgba(16,70,60,0.18)] rounded-10px z-9 flex flex-col items-center justify-center"
+      class="absolute right-10px top-222px gap-3px w-46px h-46px bg-#fff shadow-[0px_0px_12px_1px_rgba(16,70,60,0.18)] rounded-10px z-9 flex flex-col items-center justify-center"
       @click="$emit('onHandleLocation')"
     >
       <view v-if="isLocating" class="w-20px h-20px flex items-center justify-center">
@@ -34,7 +38,7 @@
     </view>
     <!-- 缩放级别显示 -->
     <view
-      :style="{ ...locationStyle, top: `${parseInt(locationStyle.top || '100px') + 56}px` }"
+      :style="{ ...locationStyle, top: `${parseInt(locationStyle.top || '222px') + 52}px` }"
       class="absolute right-10px w-46px h-46px bg-#fff shadow-[0px_0px_12px_1px_rgba(16,70,60,0.18)] rounded-10px z-9 flex flex-col items-center justify-center"
     >
       <text class="text-#333 text-14px font-bold">{{ Math.round(currentZoom) }}</text>
@@ -45,7 +49,7 @@
 <script>
 export default {
   name: 'LeafletMap',
-  emits: ['onMapMove', 'onHandleLocation', 'onFeatureClick'],
+  emits: ['onMapMove', 'onHandleLocation', 'onFeatureClick', 'onTreeMarkerClick'],
   props: {
     latlngStyle: {
       type: Object,
@@ -71,31 +75,6 @@ export default {
       type: Object,
       default: () => ({}),
     },
-  },
-  data() {
-    return {
-      mapId: 'map-' + Date.now().toString() + Math.floor(Math.random() * 1000),
-      // 仅用来点击定位后更新地图中心、更新当前位置
-      location: {
-        random: Math.random(),
-        lat: 0,
-        lng: 0,
-      },
-      currentLocation: {
-        lat: 0,
-        lng: 0,
-      },
-      redIconLatlng: {
-        lat: 0,
-        lng: 0,
-      },
-      currentZoom: 12,
-      direction: 0,
-      fitToLayerId: {
-        random: 0,
-        layerId: 0,
-      },
-    };
   },
   methods: {
     updateCurrentLocation({ lat, lng }) {
@@ -143,6 +122,10 @@ export default {
       this.$emit('onFeatureClick', data);
     },
 
+    onTreeMarkerClick(data) {
+      this.$emit('onTreeMarkerClick', data);
+    },
+
     compassCallback(res) {
       this.direction = res.direction;
     },
@@ -181,6 +164,73 @@ export default {
       // 移除罗盘变化监听
       uni.offCompassChange(this.compassCallback);
     },
+
+    // 开始绘制
+    startDrawing() {
+      // 通知 renderjs 层开始绘制
+      this.isDrawing = true;
+    },
+
+    // 完成绘制 - 接收从 renderjs 层返回的数据
+    finishDrawing() {
+      // 先触发状态改变，让 renderjs 同步数据
+      this.isDrawing = false;
+      // 等待下一个 tick，确保 renderjs watch 已经执行
+      return new Promise(resolve => {
+        this.$nextTick(() => {
+          // 稍微延迟一下，确保数据已同步
+          setTimeout(() => {
+            resolve(this.polygonData);
+          }, 50);
+        });
+      });
+    },
+
+    // 取消绘制
+    cancelDrawing() {
+      this.isDrawing = false;
+      this.polygonData = null;
+    },
+
+    // 保存多边形数据（由renderjs调用）
+    savePolygonData(data) {
+      this.polygonData = data;
+    },
+
+    // 撤销最后一个点
+    undoLastPoint() {
+      // 触发 renderjs 层撤销最后一个点
+      this.undoTrigger = Math.random();
+    },
+  },
+  data() {
+    return {
+      mapId: 'map-' + Date.now().toString() + Math.floor(Math.random() * 1000),
+      // 仅用来点击定位后更新地图中心、更新当前位置
+      location: {
+        random: Math.random(),
+        lat: 0,
+        lng: 0,
+      },
+      currentLocation: {
+        lat: 0,
+        lng: 0,
+      },
+      redIconLatlng: {
+        lat: 0,
+        lng: 0,
+      },
+      currentZoom: 12,
+      direction: 0,
+      fitToLayerId: {
+        random: 0,
+        layerId: 0,
+      },
+      // 绘制相关
+      isDrawing: false,
+      polygonData: null,
+      undoTrigger: 0,
+    };
   },
   mounted() {
     this.startCompass();
@@ -196,6 +246,7 @@ import * as turf from '@turf/turf';
 
 let mapInstance;
 let locationMarker; // 当前位置标记
+let crosshairLayer;
 
 export default {
   data() {
@@ -211,7 +262,16 @@ export default {
       baseLayers: {},
       currentBaseLayer: null,
       layerGroups: {}, // 存储图层组，key为layerId
-      highlightedLayer: null // 当前高亮的图层
+      highlightedLayer: null, // 当前高亮的图层
+      isDrawing: false, // 绘制模式
+      drawingPoints: [], // 绘制的点集合
+      drawingPolygon: null, // 绘制的多边形对象
+      drawingMarkers: [], // 绘制的标记点
+      treeMarkersLayer: null, // 古树标记点图层
+      treeMarkers: [], // 古树标记点数组
+      treeClusterPolygonsLayer: null, // 古树群面图层
+      treeClusterPolygons: [], // 古树群面数组
+      highlightedTreeClusterPolygon: null // 当前高亮的古树群面
     };
   },
   mounted() {
@@ -247,6 +307,18 @@ export default {
     receiveFitToLayerId(newValue, oldValue, ownerVm, vm) {
       if (newValue && newValue.layerId) {
         this.fitToLayerById(newValue.layerId);
+      }
+    },
+    receiveDrawingMode(newValue, oldValue, ownerVm, vm) {
+      if (newValue) {
+        this.startDrawingMode();
+      } else {
+        this.stopDrawingMode();
+      }
+    },
+    receiveUndoTrigger(newValue, oldValue, ownerVm, vm) {
+      if (this.isDrawing) {
+        this.undoLastDrawingPoint();
       }
     },
     initMap() {
@@ -295,9 +367,16 @@ export default {
 
       // 添加固定的注记图层
       this.annotationLayer.addTo(mapInstance);
-
+      // 创建十字瞄准镜图层
+      this.createCrosshair();
       // 创建geometry图层
       this.geometryLayer = L.layerGroup().addTo(mapInstance);
+
+      // 创建古树标记点图层
+      this.treeMarkersLayer = L.layerGroup().addTo(mapInstance);
+
+      // 创建古树群面图层
+      this.treeClusterPolygonsLayer = L.layerGroup().addTo(mapInstance);
 
       // 添加官方比例尺控件到左上角位置
       const officialScaleControl = L.control.scale({
@@ -307,7 +386,7 @@ export default {
       });
       officialScaleControl.addTo(mapInstance);
       officialScaleControl._container.style.left = "10px"
-      officialScaleControl._container.style.top = "40px"
+      officialScaleControl._container.style.top = "50px"
       officialScaleControl._container.style.marginLeft = "0"
 
       // 监听地图移动事件
@@ -315,6 +394,14 @@ export default {
         const center = mapInstance.getCenter();
         const zoom = mapInstance.getZoom();
         this.$ownerInstance.callMethod('onMapMove', { center, zoom });
+      });
+
+      // 初始化时设置一次中心点坐标
+      const initialCenter = mapInstance.getCenter();
+      const initialZoom = mapInstance.getZoom();
+      this.$ownerInstance.callMethod('onMapMove', {
+        center: initialCenter,
+        zoom: initialZoom,
       });
 
       // 监听地图缩放结束事件 - 处理缓存瓦片切换
@@ -431,7 +518,46 @@ export default {
         zIndexOffset: 900  // 确保在十字瞄准镜下方但在地图上方
       }).addTo(mapInstance);
     },
+    createCrosshair() {
+      // 创建十字瞄准镜图层
+      crosshairLayer = L.layerGroup().addTo(mapInstance);
 
+      // 获取地图容器的中心点
+      const mapContainer = mapInstance.getContainer();
+      const mapSize = mapInstance.getSize();
+      const centerPoint = mapInstance.containerPointToLatLng([
+        mapSize.x / 2,
+        mapSize.y / 2,
+      ]);
+
+      // 创建十字瞄准镜的SVG图标
+      const crosshairIcon = L.divIcon({
+        className: 'crosshair-icon',
+        html: `
+          <svg width="30" height="30" style="pointer-events: none;">
+            <line x1="15" y1="5" x2="15" y2="25" stroke="#ff0000" stroke-width="3" opacity="0.8" stroke-linecap="round"/>
+            <line x1="5" y1="15" x2="25" y2="15" stroke="#ff0000" stroke-width="3" opacity="0.8" stroke-linecap="round"/>
+          </svg>
+        `,
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+      });
+
+      // 创建十字瞄准镜标记
+      const crosshairMarker = L.marker(centerPoint, {
+        icon: crosshairIcon,
+        interactive: false, // 不可交互
+        zIndexOffset: 1000, // 确保在最上层
+      });
+
+      crosshairLayer.addLayer(crosshairMarker);
+
+      // 监听地图移动事件，更新十字瞄准镜位置
+      mapInstance.on('move zoom', () => {
+        const newCenter = mapInstance.getCenter();
+        crosshairMarker.setLatLng(newCenter);
+      });
+    },
     // 更新位置标记的方向
     updateLocationDirection(direction) {
       this.currentDirection = direction;
@@ -629,6 +755,286 @@ export default {
       } else {
         console.warn('图层边界无效:', layerId);
       }
+    },
+
+    // 开始绘制模式
+    startDrawingMode() {
+      this.isDrawing = true;
+      this.drawingPoints = [];
+      this.drawingMarkers = [];
+
+      // 添加地图点击事件
+      if (mapInstance) {
+        mapInstance.on('click', this.onMapClick);
+        // 改变鼠标样式
+        mapInstance.getContainer().style.cursor = 'crosshair';
+      }
+    },
+
+    // 停止绘制模式
+    stopDrawingMode() {
+      this.isDrawing = false;
+
+      // 移除地图点击事件
+      if (mapInstance) {
+        mapInstance.off('click', this.onMapClick);
+        // 恢复鼠标样式
+        mapInstance.getContainer().style.cursor = '';
+      }
+
+      // 清除绘制的图形
+      this.clearDrawing();
+    },
+
+    // 地图点击事件 - 添加绘制点
+    onMapClick(e) {
+      if (!this.isDrawing) return;
+
+      const latlng = e.latlng;
+      this.drawingPoints.push([latlng.lng, latlng.lat]);
+
+      // 添加标记点
+      const marker = L.circleMarker([latlng.lat, latlng.lng], {
+        radius: 6,
+        fillColor: '#01bd8d',
+        color: '#fff',
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 1
+      }).addTo(mapInstance);
+
+      this.drawingMarkers.push(marker);
+
+      // 如果已有2个以上的点，绘制多边形
+      if (this.drawingPoints.length >= 2) {
+        this.updateDrawingPolygon();
+      }
+    },
+
+    // 更新绘制的多边形
+    updateDrawingPolygon() {
+      // 移除旧的多边形
+      if (this.drawingPolygon) {
+        mapInstance.removeLayer(this.drawingPolygon);
+      }
+
+      // 创建新的多边形（需要转换坐标格式：lng,lat -> lat,lng）
+      const latlngs = this.drawingPoints.map(point => [point[1], point[0]]);
+
+      this.drawingPolygon = L.polygon(latlngs, {
+        color: '#01bd8d',
+        fillColor: '#01bd8d',
+        fillOpacity: 0.3,
+        weight: 2
+      }).addTo(mapInstance);
+    },
+
+    // 清除绘制
+    clearDrawing() {
+      // 移除所有标记点
+      this.drawingMarkers.forEach(marker => {
+        mapInstance.removeLayer(marker);
+      });
+      this.drawingMarkers = [];
+
+      // 移除多边形
+      if (this.drawingPolygon) {
+        mapInstance.removeLayer(this.drawingPolygon);
+        this.drawingPolygon = null;
+      }
+
+      this.drawingPoints = [];
+    },
+
+    // 获取绘制的多边形数据（供父组件调用）
+    getDrawnPolygon() {
+      if (this.drawingPoints.length < 3) {
+        return null;
+      }
+
+      // 返回 GeoJSON 格式的多边形数据
+      // 闭合多边形（首尾点相同）
+      const coordinates = [...this.drawingPoints, this.drawingPoints[0]];
+
+      return {
+        type: 'Polygon',
+        coordinates: [coordinates]
+      };
+    },
+
+    // 撤销最后一个绘制点
+    undoLastDrawingPoint() {
+      if (this.drawingPoints.length === 0) {
+        return;
+      }
+
+      // 移除最后一个点
+      this.drawingPoints.pop();
+
+      // 移除最后一个标记
+      if (this.drawingMarkers.length > 0) {
+        const lastMarker = this.drawingMarkers.pop();
+        mapInstance.removeLayer(lastMarker);
+      }
+
+      // 重新绘制多边形
+      if (this.drawingPoints.length >= 2) {
+        this.updateDrawingPolygon();
+      } else {
+        // 如果少于2个点，移除多边形
+        if (this.drawingPolygon) {
+          mapInstance.removeLayer(this.drawingPolygon);
+          this.drawingPolygon = null;
+        }
+      }
+    },
+
+    // 添加古树标记点
+    addTreeMarkers(markers) {
+      if (!this.treeMarkersLayer) {
+        return;
+      }
+
+      // 清除现有标记点
+      this.treeMarkersLayer.clearLayers();
+      this.treeMarkers = [];
+
+      // 添加新的标记点
+      markers.forEach(markerData => {
+        const { lat, lng, iconUrl, id, data } = markerData;
+
+        // 创建自定义图标
+        const customIcon = L.icon({
+          iconUrl: iconUrl,
+          iconSize: [30, 34], // 图标大小
+          iconAnchor: [16, 32], // 图标锚点（底部中心）
+          popupAnchor: [0, -32] // 弹窗锚点
+        });
+
+        // 创建标记点
+        const marker = L.marker([lat, lng], {
+          icon: customIcon
+        });
+
+        // 绑定点击事件
+        marker.on('click', () => {
+          // 通过 $ownerInstance 调用父组件的方法
+          this.$ownerInstance.callMethod('onTreeMarkerClick', {
+            id,
+            lat,
+            lng,
+            data
+          });
+        });
+
+        // 添加到图层
+        marker.addTo(this.treeMarkersLayer);
+
+        // 保存引用
+        this.treeMarkers.push(marker);
+      });
+
+      console.log(`已添加 ${markers.length} 个古树标记点`);
+    },
+
+    // 清除古树标记点
+    clearTreeMarkers() {
+      if (this.treeMarkersLayer) {
+        this.treeMarkersLayer.clearLayers();
+        this.treeMarkers = [];
+      }
+    },
+
+    // 添加古树群面数据
+    addTreeClusterPolygons(polygons) {
+      if (!this.treeClusterPolygonsLayer) {
+        console.error('古树群面图层未初始化');
+        return;
+      }
+
+      // 清空之前的图层
+      this.clearTreeClusterPolygons();
+
+      polygons.forEach(polygonData => {
+        const { id, geom, properties, color } = polygonData;
+
+        // 确保 geom 是 GeoJSON 格式
+        if (!geom || !geom.coordinates) {
+          console.warn('古树群面数据缺少 geom 字段:', id);
+          return;
+        }
+
+        // 转换坐标格式 (GeoJSON 格式: [lng, lat])
+        const latlngs = geom.coordinates[0].map(coord => [coord[1], coord[0]]);
+
+        // 创建多边形
+        const polygon = L.polygon(latlngs, {
+          color: color,
+          fillColor: color,
+          fillOpacity: 0.3,
+          weight: 2,
+          opacity: 0.8
+        });
+
+        // 添加点击事件
+        polygon.on('click', (e) => {
+          // 如果有之前高亮的面，恢复其原始颜色
+          if (this.highlightedTreeClusterPolygon) {
+            const originalPolygonData = this.highlightedTreeClusterPolygon.data;
+            this.highlightedTreeClusterPolygon.layer.setStyle({
+              color: originalPolygonData.color,
+              fillColor: originalPolygonData.color,
+              fillOpacity: 0.3,
+              weight: 2,
+              opacity: 0.8
+            });
+          }
+
+          // 高亮当前点击的面为红色
+          e.target.setStyle({
+            color: '#ff0000',
+            fillColor: '#ff0000',
+            fillOpacity: 0.5,
+            weight: 3,
+            opacity: 1
+          });
+
+          // 保存当前高亮的面和其状态信息
+          this.highlightedTreeClusterPolygon = {
+            layer: e.target,
+            data: polygonData
+          };
+
+          // 触发父组件事件，传递点击的要素数据
+          this.$ownerInstance.callMethod('onFeatureClick', {
+            type: 'Feature',
+            properties: properties || {},
+            geometry: geom,
+            id: id
+          });
+        });
+
+        // 添加到图层
+        polygon.addTo(this.treeClusterPolygonsLayer);
+
+        // 保存引用
+        this.treeClusterPolygons.push({
+          id,
+          polygon,
+          data: polygonData
+        });
+      });
+
+      console.log(`已添加 ${polygons.length} 个古树群面`);
+    },
+
+    // 清除古树群面
+    clearTreeClusterPolygons() {
+      if (this.treeClusterPolygonsLayer) {
+        this.treeClusterPolygonsLayer.clearLayers();
+        this.treeClusterPolygons = [];
+        this.highlightedTreeClusterPolygon = null;
+      }
     }
   },
   watch: {
@@ -642,6 +1048,13 @@ export default {
         this.addOrRemoveLayer(newVal);
       },
       deep: true,
+    },
+    isDrawing(newVal, oldVal) {
+      // 当从绘制模式切换到非绘制模式时，同步多边形数据到父组件
+      if (oldVal === true && newVal === false) {
+        const polygonData = this.getDrawnPolygon();
+        this.$ownerInstance.callMethod('savePolygonData', polygonData);
+      }
     }
   }
 };

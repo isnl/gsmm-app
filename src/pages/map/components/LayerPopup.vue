@@ -31,7 +31,8 @@ const layerList = [
 ];
 
 // 使用 computed 获取图层列表
-const apiLayerList = computed(() => layerStore.layerList);
+// const apiLayerList = computed(() => layerStore.layerList);
+const apiLayerList = [];
 
 // 节流控制
 const throttleMap = new Map<number, number>();

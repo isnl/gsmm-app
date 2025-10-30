@@ -1,7 +1,7 @@
 {
-    "name" : "甘肃三北",
-    "appid" : "__UNI__C0A5A71",
-    "description" : "甘肃三北",
+    "name" : "古树名木",
+    "appid" : "__UNI__356A42A",
+    "description" : "古树名木",
     "versionName" : "1.0.0",
     "versionCode" : 101,
     "transformPx" : false,
@@ -113,22 +113,7 @@
                 }
             }
         },
-        "nativePlugins" : {
-            "GuoWei-SelectFileModule" : {
-                "__plugin_info__" : {
-                    "name" : "Android文件选择 - [试用版，仅用于自定义调试基座]",
-                    "description" : "目录方式，选择Android手机储存文件，支持SD卡、U盘；支持多选、过滤，需要离线包联系邮箱：guo.we@qq.com，在 uni-im 里发消息难得看到。",
-                    "platforms" : "Android",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=4607",
-                    "android_package_name" : "",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 0,
-                    "pid" : "4607",
-                    "parameters" : {}
-                }
-            }
-        }
+        "nativePlugins" : {}
     },
     "networkTimeout" : {
         "uploadFile" : 600000,

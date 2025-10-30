@@ -8,6 +8,7 @@ export enum InvestigateType {
   ARTIFICIAL_GRASSLAND = 'artificial_grassland', // 人工种草
   GRASSLAND_IMPROVEMENT = 'grassland_improvement', // 草原改良
   SANDY_LAND_TREATMENT = 'sandy_land_treatment', // 沙化土地综合治理
+  TREE_INVENTORY = 'tree_inventory', // 每木调查表
 }
 
 // 调查类型选项
@@ -49,6 +50,10 @@ export const investigateTypeOptions: InvestigateTypeOption[] = [
   {
     text: '沙化土地综合治理',
     value: InvestigateType.SANDY_LAND_TREATMENT,
+  },
+  {
+    text: '每木调查表',
+    value: InvestigateType.TREE_INVENTORY,
   },
 ];
 
