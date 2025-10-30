@@ -363,7 +363,7 @@ export default {
       }).setZIndex(2);
 
       // 设置初始图层
-      this.setBaseLayer(this.layerType);
+      this.setBaseLayer("img");
 
       // 添加固定的注记图层
       this.annotationLayer.addTo(mapInstance);
