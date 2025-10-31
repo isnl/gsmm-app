@@ -454,11 +454,11 @@ const handleSave = async () => {
     <!-- 底部操作按钮 -->
     <view class="w-full px-20px py-15px border-t-1px border-#eee bg-#fff">
       <!-- 测试数据按钮 -->
-      <view class="mb-10px">
+      <!-- <view class="mb-10px">
         <view @click="generateTestData" class="w-full h-40px fc rounded-8px bg-#ff9800">
           <text class="text-14px color-#fff">生成测试数据</text>
         </view>
-      </view>
+      </view> -->
 
       <!-- 保存和提交按钮 -->
       <view class="flex gap-15px">

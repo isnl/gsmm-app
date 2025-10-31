@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
-import { onLoad } from '@dcloudio/uni-app';
+import { onLoad, onShow } from '@dcloudio/uni-app';
 import { service } from '@/service';
 import VideoPlayerPopup from '@/components/VideoPlayerPopup.vue';
 
@@ -121,6 +121,9 @@ onLoad((options: any) => {
   }
 });
 
+onShow(() => {
+  loadDetail(treeId.value);
+});
 // 返回
 const handleBack = () => {
   uni.navigateBack();
@@ -246,7 +249,7 @@ const fieldGroups = [
     </view>
 
     <!-- 详情内容 -->
-    <scroll-view v-else scroll-y class="flex-1 bg-#f5f5f5">
+    <scroll-view v-else scroll-y class="flex-1 overflow-hidden bg-#f5f5f5">
       <view :class="showEditButton ? 'pb-100px' : 'pb-20px'">
         <!-- 头部卡片 -->
         <view class="mx-15px mt-15px bg-#fff rounded-12px p-20px">

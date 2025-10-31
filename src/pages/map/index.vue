@@ -47,6 +47,42 @@ const pannelInfo = ref({
   diaochazhongCount: 0,
   yidiaochaCount: 0,
 });
+
+// 获取古树统计数据
+const getTreeCountData = async () => {
+  try {
+    // 待调查默认为0
+    pannelInfo.value.daidiaochaCount = 0;
+
+    // 获取调查中的数据 (status=1)
+    const diaochazhongRes = await service({
+      url: '/gu_shus/count',
+      method: 'GET',
+      params: {
+        status: 1,
+      },
+    });
+    if (diaochazhongRes.statusCode === 200) {
+      console.log('调查中数据:', diaochazhongRes.data);
+      pannelInfo.value.diaochazhongCount = diaochazhongRes.data || 0;
+    }
+
+    // 获取已调查的数据 (status=2)
+    const yidiaochaRes = await service({
+      url: '/gu_shus/count',
+      method: 'GET',
+      params: {
+        status: 2,
+      },
+    });
+    if (yidiaochaRes.statusCode === 200) {
+      console.log('已调查数据:', yidiaochaRes.data);
+      pannelInfo.value.yidiaochaCount = yidiaochaRes.data || 0;
+    }
+  } catch (error) {
+    console.error('获取古树统计数据失败:', error);
+  }
+};
 // 定义一个定位权限的状态：
 const preciseLocationPermissionStatus = ref(false);
 
@@ -61,6 +97,7 @@ onShow(async () => {
     startLocationUpdate();
   }
   getTreeData();
+  getTreeCountData(); // 获取古树统计数据
   if (firstLoad.value) {
     firstLoad.value = false;
     return;
@@ -75,16 +112,19 @@ const treeMarkers = ref<any[]>([]);
 const treeClusterPolygons = ref<any[]>([]);
 
 const getTreeData = async () => {
+  console.log('getTreeData 被调用，当前tab:', leftTabActive.value);
+  // 无论切换到哪个tab，都先清空地图上的古树标记点和古树群面
+  if (baseMapRef.value) {
+    console.log('调用 clearAllTreeData');
+    baseMapRef.value.clearAllTreeData();
+  } else {
+    console.log('baseMapRef 未初始化');
+  }
+  treeMarkers.value = [];
+  treeClusterPolygons.value = [];
+
   if (leftTabActive.value === 'ancientTree') {
     try {
-      // 先清空地图上的古树标记点和古树群面
-      if (baseMapRef.value) {
-        baseMapRef.value.clearTreeMarkers();
-        baseMapRef.value.clearTreeClusterPolygons();
-      }
-      treeMarkers.value = [];
-      treeClusterPolygons.value = [];
-
       const res = await service({
         url: '/gu_shus/all',
         method: 'GET',
@@ -98,11 +138,11 @@ const getTreeData = async () => {
             // 根据 status 确定图标
             let iconUrl = '';
             if (item.status === 1) {
-              iconUrl = '/static/images/dcz_tree.png'; // 调查中
+              iconUrl = 'static/images/dcz_tree.png'; // 调查中
             } else if (item.status === 2) {
-              iconUrl = '/static/images/ydc_tree.png'; // 已调查
+              iconUrl = 'static/images/ydc_tree.png'; // 已调查
             } else {
-              iconUrl = '/static/images/ddc_tree.png'; // 待调查
+              iconUrl = 'static/images/ddc_tree.png'; // 待调查
             }
 
             return {
@@ -118,6 +158,7 @@ const getTreeData = async () => {
 
         // 添加标记点到地图
         if (baseMapRef.value && markers.length > 0) {
+          console.log('添加古树标记点:', markers);
           baseMapRef.value.addTreeMarkers(markers);
         }
       } else {
@@ -129,14 +170,6 @@ const getTreeData = async () => {
   } else if (leftTabActive.value === 'ancientTreeCluster') {
     // 切换到古树群时，加载古树群面数据
     try {
-      // 先清空地图上的古树标记点和古树群面
-      if (baseMapRef.value) {
-        baseMapRef.value.clearTreeMarkers();
-        baseMapRef.value.clearTreeClusterPolygons();
-      }
-      treeMarkers.value = [];
-      treeClusterPolygons.value = [];
-
       const res = await service({
         url: '/gu_shu_quns/all',
         method: 'GET',
@@ -168,7 +201,91 @@ const getTreeData = async () => {
 
         // 添加面数据到地图
         if (baseMapRef.value && polygons.length > 0) {
+          console.log('添加古树群面:', polygons);
           baseMapRef.value.addTreeClusterPolygons(polygons);
+        }
+        // 遍历古树群数据，加载每木调查和样方调查的点位数据
+        const clusterDataList = Array.isArray(res.data) ? res.data : [];
+        const allMarkers: any[] = [];
+
+        for (const item of clusterDataList) {
+          if (!item.geom) continue;
+
+          try {
+            // 请求每木调查数据
+            const treeRes = await service({
+              url: `/gu_shus?gsqId=${item.id}&page=1&size=999`,
+              method: 'GET',
+            });
+
+            if (treeRes.statusCode === 200 && treeRes.data?.data) {
+              const treeMarkers = (Array.isArray(treeRes.data.data) ? treeRes.data.data : [])
+                .filter((tree: any) => tree.jd && tree.wd)
+                .map((tree: any) => {
+                  // 根据 submitType 确定图标
+                  let iconUrl = '';
+                  if (tree.submitType === 1) {
+                    iconUrl = 'static/images/ydc_tree.png'; // 已调查
+                  } else if (tree.submitType === 0) {
+                    iconUrl = 'static/images/dcz_tree.png'; // 调查中
+                  } else {
+                    iconUrl = 'static/images/ddc_tree.png'; // 待调查
+                  }
+
+                  return {
+                    id: tree.id,
+                    lat: parseFloat(tree.wd),
+                    lng: parseFloat(tree.jd),
+                    iconUrl,
+                    data: tree,
+                  };
+                });
+
+              allMarkers.push(...treeMarkers);
+            }
+
+            // 请求样方调查数据
+            const plotRes = await service({
+              url: `/gu_shu_qun_chou_yangs?gsqId=${item.id}&page=1&size=999`,
+              method: 'GET',
+            });
+
+            if (plotRes.statusCode === 200 && plotRes.data?.data) {
+              const plotMarkers = (Array.isArray(plotRes.data.data) ? plotRes.data.data : [])
+                .filter((plot: any) => plot.jd && plot.wd)
+                .map((plot: any) => {
+                  // 样方调查使用不同的图标
+                  let iconUrl = '';
+                  if (plot.submitType === 1) {
+                    iconUrl = 'static/images/ydc_tree.png'; // 已调查
+                  } else if (plot.submitType === 0) {
+                    iconUrl = 'static/images/dcz_tree.png'; // 调查中
+                  } else {
+                    iconUrl = 'static/images/ddc_tree.png'; // 待调查
+                  }
+
+                  return {
+                    id: plot.id,
+                    lat: parseFloat(plot.wd),
+                    lng: parseFloat(plot.jd),
+                    iconUrl,
+                    data: plot,
+                    isPlot: true, // 标记为样方调查点
+                  };
+                });
+
+              allMarkers.push(...plotMarkers);
+            }
+          } catch (error) {
+            console.error(`加载古树群 ${item.id} 的调查数据失败:`, error);
+          }
+        }
+
+        // 添加所有标记点到地图
+        if (baseMapRef.value && allMarkers.length > 0) {
+          treeMarkers.value = allMarkers;
+          baseMapRef.value.addTreeMarkers(allMarkers);
+          console.log(`已添加 ${allMarkers.length} 个标记点到地图`);
         }
       } else {
         console.error('获取古树群数据失败:', res.message);
@@ -283,10 +400,8 @@ const onHandleLocation = async () => {
  */
 const handleTreeMarkerClick = (markerData: any) => {
   console.log('古树标记点击:', markerData);
-
-  // 跳转到详情页
   uni.navigateTo({
-    url: `/pages/ancient_tree/detail?id=${markerData.id}`,
+    url: markerData.isPlot ? `/pages/ancient_tree_cluster_sample/detail?id=${markerData.id}` : `/pages/ancient_tree/detail?id=${markerData.id}`,
   });
 };
 
@@ -462,7 +577,8 @@ const finishDrawing = async () => {
 
   console.log('获取到的多边形数据:', polygonData);
 
-  if (!polygonData || !polygonData.coordinates || !polygonData.coordinates[0] || polygonData.coordinates[0].length < 3) {
+  // coordinates[0] 是闭合后的坐标数组，首尾点相同，所以至少需要4个点（3个不同的点 + 1个闭合点）
+  if (!polygonData || !polygonData.coordinates || !polygonData.coordinates[0] || polygonData.coordinates[0].length < 4) {
     uni.showToast({
       title: '请至少绘制3个点',
       icon: 'none',
@@ -519,7 +635,7 @@ const cancelDrawing = () => {
     />
     <!-- 行政区选择器 -->
     <view
-      class="absolute left-10px top-10px px-20px flex-1 px-10px w-95% h-40px flex items-center gap-10px bg-#fff shadow-[0px_0px_12px_1px_rgba(16,70,60,0.18)] rounded-[10px]"
+      class="absolute left-10px top-40px px-20px flex-1 px-10px w-95% h-40px flex items-center gap-10px bg-#fff shadow-[0px_0px_12px_1px_rgba(16,70,60,0.18)] rounded-[10px]"
     >
       <span class="text-18px color-#000 iconfont icon-a-zu15826"></span>
       <view
@@ -533,7 +649,7 @@ const cancelDrawing = () => {
       <uni-icons v-if="selectedDistrict" type="close" size="24" color="#999" class="mr-8px cursor-pointer" @click="clearDistrictFilter"></uni-icons>
       <span v-else class="iconfont icon-a-zu15832 mr-8px !text-8px font-bold text-#00bf9f cursor-pointer" @click="openDistrictPopup"></span>
     </view>
-    <view class="absolute right-10px top-58px h-100px bg-#fff w-46px p-10px rounded-10px shadow-[0px_0px_12px_1px_rgba(16,70,60,0.18)]">
+    <view class="absolute right-10px top-88px h-100px bg-#fff w-46px p-10px rounded-10px shadow-[0px_0px_12px_1px_rgba(16,70,60,0.18)]">
       <!-- 一级二级控制 -->
       <view class="flex-1 fc flex-col gap-3px border-rd-b-10px mb-10px" @click="openLayerPopup">
         <image src="/static/images/icons/layer.png" mode="scaleToFill" class="w-20px h-20px"></image>
@@ -544,7 +660,7 @@ const cancelDrawing = () => {
         <text class="text-10px color-#0F1826">列表</text>
       </view>
     </view>
-    <view class="absolute right-10px top-165px h-50px bg-#fff w-46px px-10px py-5px rounded-10px shadow-[0px_0px_12px_1px_rgba(16,70,60,0.18)]">
+    <view class="absolute right-10px top-195px h-50px bg-#fff w-46px px-10px py-5px rounded-10px shadow-[0px_0px_12px_1px_rgba(16,70,60,0.18)]">
       <view class="flex-1 fc flex-col gap-3px border-rd-b-10px" @click="onAddPage">
         <image v-if="leftTabActive === 'ancientTree'" src="/static/images/add_tree.png" mode="scaleToFill" class="w-20px h-20px"></image>
         <image v-else src="/static/images/add_tree_cluster.png" mode="scaleToFill" class="w-20px h-20px"></image>
@@ -552,7 +668,7 @@ const cancelDrawing = () => {
       </view>
     </view>
 
-    <view class="absolute left-10px top-90px w-46px bg-#fff shadow-[0px_0px_12px_1px_rgba(16,70,60,0.18)] rounded-10px z-1 flex flex-col overflow-hidden">
+    <view class="absolute left-10px top-120px w-46px bg-#fff shadow-[0px_0px_12px_1px_rgba(16,70,60,0.18)] rounded-10px z-1 flex flex-col overflow-hidden">
       <view
         class="h-55px fc flex-col gap-3px"
         v-for="item in leftTabs"
@@ -610,13 +726,13 @@ const cancelDrawing = () => {
         </view>
       </view>
 
-      <view class="w-full pt-10px b-t-1px b-t-solid b-t-#eee flex items-center">
+      <!-- <view class="w-full pt-10px b-t-1px b-t-solid b-t-#eee flex items-center">
         <view class="flex items-center text-12px gap-5px pr-10px">
           <image src="/static/images/icons/people.png" mode="widthFix" class="w-12px"></image>
           <text class="text-#8B8AA1">我的调查</text>
           <text class="text-#333">{{ syncPendingAndErrorList.length }}</text>
         </view>
-      </view>
+      </view> -->
     </view>
   </view>
 

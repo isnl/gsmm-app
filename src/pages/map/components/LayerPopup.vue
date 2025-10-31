@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import { onMounted, computed } from 'vue';
-import tdtImage from '@/static/images/icons/tdt_image.png';
-import tdtMap from '@/static/images/icons/tdt_map.png';
 import { service } from '@/service';
 import { useLayerStore, type LayerItem } from '@/stores/layer';
 
@@ -21,18 +19,18 @@ const layerList = [
   {
     name: '天地图卫星地图',
     key: 'img',
-    img: tdtImage,
+    img: 'static/images/icons/tdt_image.png',
   },
   {
     name: '天地图电子地图',
     key: 'vec',
-    img: tdtMap,
+    img: 'static/images/icons/tdt_map.png',
   },
 ];
+const checkImg = 'static/images/icons/checked.png';
 
 // 使用 computed 获取图层列表
-// const apiLayerList = computed(() => layerStore.layerList);
-const apiLayerList = [];
+const apiLayerList = computed(() => layerStore.layerList);
 
 // 节流控制
 const throttleMap = new Map<number, number>();
@@ -152,9 +150,9 @@ const locateToLayer = (layer: LayerItem, event: Event) => {
   emit('locateLayer', layer);
 };
 
-onMounted(() => {
-  getApiLayerList();
-});
+// onMounted(() => {
+//   getApiLayerList();
+// });
 </script>
 
 <template>
@@ -167,7 +165,7 @@ onMounted(() => {
           <view class="w-64px h-50px relative">
             <img :src="item.img" class="w-64px h-50px border-rd-3px" />
             <view class="absolute left-0 top-0 w-64px h-50px bg-[rgba(15,24,38,.72)] b-rd-3px fc" v-if="activeLayer === item.key">
-              <img src="@/static/images/icons/checked.png" class="w-36px h-36px" />
+              <img :src="checkImg" class="w-36px h-36px" />
             </view>
           </view>
           <text class="text-9px color-#000">{{ item.name }}</text>
@@ -176,7 +174,7 @@ onMounted(() => {
     </view>
 
     <!-- 图层列表 -->
-    <view class="w-full mt-20px flex-1 flex flex-col overflow-hidden">
+    <!-- <view class="w-full mt-20px flex-1 flex flex-col overflow-hidden">
       <view class="w-full h-25px flex items-center pl-8px text-12px"> 图层列表 </view>
       <view class="w-full flex flex-col flex-1 overflow-hidden">
         <scroll-view height="100%" :scroll-y="true" class="w-full overflow-hidden">
@@ -193,9 +191,7 @@ onMounted(() => {
               {{ layer.name }}
             </text>
 
-            <!-- 操作按钮区域 -->
             <view class="flex items-center gap-8px">
-              <!-- 定位按钮 -->
               <view
                 v-if="layer.isActive"
                 class="w-36px h-36px flex items-center justify-center border-rd-4px transition-all active:bg-#e0e0e0"
@@ -204,12 +200,10 @@ onMounted(() => {
                 <uni-icons type="location-filled" size="20" color="#01bd8d"></uni-icons>
               </view>
 
-              <!-- 加载状态 -->
               <view v-if="layer.isLoading" class="w-36px h-36px flex items-center justify-center">
                 <uni-icons type="spinner-cycle" size="20" color="#01bd8d"></uni-icons>
               </view>
 
-              <!-- 开启/关闭图标 -->
               <view
                 v-else
                 class="w-36px h-36px flex items-center justify-center border-rd-4px transition-all"
@@ -222,12 +216,11 @@ onMounted(() => {
             </view>
           </view>
 
-          <!-- 空状态 -->
           <view v-if="apiLayerList.length === 0" class="w-full h-100px flex items-center justify-center">
             <text class="text-12px color-#999">暂无图层数据</text>
           </view>
         </scroll-view>
       </view>
-    </view>
+    </view> -->
   </view>
 </template>

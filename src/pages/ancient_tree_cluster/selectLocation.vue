@@ -188,7 +188,7 @@ export default defineComponent({
 <template>
   <view class="w-full h-full flex flex-col">
     <!-- 顶部标题栏 -->
-    <view class="w-full bg-#fff px-20px py-15px border-b-1px border-#eee">
+    <view class="w-full bg-gradient-to-b from-#08bd92 to-#07a47f px-20px pt-30px pb-15px border-b-1px border-#eee">
       <view class="flex items-center justify-between">
         <text class="text-16px font-bold color-#333">{{ title }}</text>
         <view class="px-10px py-4px bg-#e6f7f1 rounded-4px">
@@ -242,6 +242,14 @@ let pointMarker = null;
 
 export default {
   mounted() {
+    this.link = document.createElement('link');
+    this.link.rel = 'stylesheet';
+    this.link.href = 'static/leaflet/dist/leaflet.css';
+    document.head.appendChild(this.link);
+
+    this.$nextTick(() => {
+      this.initMap();
+    });
     this.$nextTick(() => {
       this.initMap();
     });

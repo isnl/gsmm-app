@@ -1,5 +1,6 @@
 {
-  "pages": [{
+  "pages": [
+    {
       "path": "pages/map/index",
       "style": {
         "navigationStyle": "custom",
@@ -26,7 +27,13 @@
     {
       "path": "pages/ancient_tree/detail",
       "style": {
-        "navigationBarTitleText": "古树详情"
+        "navigationBarTitleText": "古树详情",
+        "app-plus": {
+          "titleNView": {
+            "titleAlign": "left"
+          },
+          "bounce": "none"
+        }
       }
     },
     {
@@ -38,7 +45,13 @@
     {
       "path": "pages/ancient_tree_cluster/detail",
       "style": {
-        "navigationBarTitleText": "古树群详情"
+        "navigationBarTitleText": "古树群详情",
+        "app-plus": {
+          "titleNView": {
+            "titleAlign": "left"
+          },
+          "bounce": "none"
+        }
       }
     },
     {
@@ -103,7 +116,8 @@
     "selectedColor": "#01bd8d",
     "borderStyle": "black",
     "backgroundColor": "#ffffff",
-    "list": [{
+    "list": [
+      {
         "pagePath": "pages/map/index",
         "iconPath": "static/tabs/map.png",
         "selectedIconPath": "static/tabs/map-active.png",

@@ -227,11 +227,11 @@ const handleCancel = () => {
     <!-- 底部按钮 -->
     <view class="fixed bottom-0 left-0 right-0 bg-#fff p-20px">
       <!-- 测试数据按钮 -->
-      <view class="mb-10px">
+      <!-- <view class="mb-10px">
         <view @click="generateTestData" class="w-full h-40px fc rounded-8px bg-#ff9800">
           <text class="text-14px color-#fff">生成测试数据</text>
         </view>
-      </view>
+      </view> -->
 
       <!-- 保存和取消按钮 -->
       <view class="flex items-center gap-15px">

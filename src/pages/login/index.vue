@@ -114,7 +114,7 @@ const performLogin = () => {
             icon: 'success',
           });
           uni.switchTab({
-            url: '/pages/my/index',
+            url: '/pages/map/index',
           });
         } catch (e) {
           uni.showToast({

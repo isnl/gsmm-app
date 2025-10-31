@@ -153,7 +153,7 @@ const handlePlotItemClick = (item: any) => {
     uni.navigateTo({
       url: `/pages/ancient_tree_cluster_sample/detail?id=${item.id}`,
     });
-  }else{
+  } else {
     // 调查中或待调查：跳转到编辑页
     uni.navigateTo({
       url: `/pages/ancient_tree_cluster_sample/index?id=${item.id}&gsqId=${clusterId.value}&gsqbh=${basicInfo.value.gsqbh}`,
@@ -408,7 +408,7 @@ onShow(() => {
     </view>
 
     <!-- 详情内容 -->
-    <scroll-view v-else scroll-y class="flex-1 bg-#f5f5f5">
+    <scroll-view v-else scroll-y class="flex-1 overflow-hidden bg-#f5f5f5">
       <view :class="showEditButton ? 'pb-100px' : 'pb-20px'">
         <!-- 头部卡片 -->
         <view class="mx-15px mt-15px bg-#fff rounded-12px p-20px">
@@ -674,8 +674,8 @@ onShow(() => {
 
                 <!-- 第二行：详细信息 -->
                 <view class="flex items-center gap-10px flex-wrap">
-                  <text class="text-13px color-#666">面积: {{ item.cyMj?(item.cyMj+'㎡'):'—' }}</text>
-                  <text class="text-13px color-#666">{{ item.cyff  || '—' }}</text>
+                  <text class="text-13px color-#666">面积: {{ item.cyMj ? item.cyMj + '㎡' : '—' }}</text>
+                  <text class="text-13px color-#666">{{ item.cyff || '—' }}</text>
                 </view>
                 <view v-if="item.createdAt" class="mt-2px">
                   <text class="text-12px color-#999">创建时间: {{ item.createdAt }}</text>

@@ -5,6 +5,8 @@
       :geometry="geometry"
       :change:geometry="renderjs.receiveGeometry"
       :currentOperateLayer="currentOperateLayer"
+      :layerType="layerType"
+      :change:layerType="renderjs.receiveLayerType"
       :location="location"
       :change:location="renderjs.receiveLocation"
       :direction="direction"
@@ -17,6 +19,12 @@
       :change:isDrawing="renderjs.receiveDrawingMode"
       :undoTrigger="undoTrigger"
       :change:undoTrigger="renderjs.receiveUndoTrigger"
+      :clearTreeTrigger="clearTreeTrigger"
+      :change:clearTreeTrigger="renderjs.receiveClearTreeTrigger"
+      :treeMarkersData="treeMarkersData"
+      :change:treeMarkersData="renderjs.receiveTreeMarkersData"
+      :treeClusterPolygonsData="treeClusterPolygonsData"
+      :change:treeClusterPolygonsData="renderjs.receiveTreeClusterPolygonsData"
       ref="mapContainer"
       class="renderjs w-full h-full z-0"
     ></view>
@@ -28,7 +36,7 @@
     </view>
     <view
       :style="locationStyle"
-      class="absolute right-10px top-222px gap-3px w-46px h-46px bg-#fff shadow-[0px_0px_12px_1px_rgba(16,70,60,0.18)] rounded-10px z-9 flex flex-col items-center justify-center"
+      class="absolute right-10px top-252px gap-3px w-46px h-46px bg-#fff shadow-[0px_0px_12px_1px_rgba(16,70,60,0.18)] rounded-10px z-9 flex flex-col items-center justify-center"
       @click="$emit('onHandleLocation')"
     >
       <view v-if="isLocating" class="w-20px h-20px flex items-center justify-center">
@@ -38,7 +46,7 @@
     </view>
     <!-- 缩放级别显示 -->
     <view
-      :style="{ ...locationStyle, top: `${parseInt(locationStyle.top || '222px') + 52}px` }"
+      :style="{ ...locationStyle, top: `${parseInt(locationStyle.top || '252px') + 52}px` }"
       class="absolute right-10px w-46px h-46px bg-#fff shadow-[0px_0px_12px_1px_rgba(16,70,60,0.18)] rounded-10px z-9 flex flex-col items-center justify-center"
     >
       <text class="text-#333 text-14px font-bold">{{ Math.round(currentZoom) }}</text>
@@ -202,6 +210,45 @@ export default {
       // 触发 renderjs 层撤销最后一个点
       this.undoTrigger = Math.random();
     },
+
+    // 清除古树标记点和古树群面
+    clearTreeMarkers() {
+      this.clearTreeTrigger = {
+        random: Math.random(),
+        type: 'markers',
+      };
+    },
+
+    clearTreeClusterPolygons() {
+      this.clearTreeTrigger = {
+        random: Math.random(),
+        type: 'polygons',
+      };
+    },
+
+    // 清除所有古树相关数据（标记点和面）
+    clearAllTreeData() {
+      this.clearTreeTrigger = {
+        random: Math.random(),
+        type: 'all',
+      };
+    },
+
+    // 添加古树标记点
+    addTreeMarkers(markers) {
+      this.treeMarkersData = {
+        random: Math.random(),
+        markers: markers,
+      };
+    },
+
+    // 添加古树群面
+    addTreeClusterPolygons(polygons) {
+      this.treeClusterPolygonsData = {
+        random: Math.random(),
+        polygons: polygons,
+      };
+    },
   },
   data() {
     return {
@@ -230,6 +277,21 @@ export default {
       isDrawing: false,
       polygonData: null,
       undoTrigger: 0,
+      // 清除古树相关数据的触发器
+      clearTreeTrigger: {
+        random: 0,
+        type: '',
+      },
+      // 古树标记点数据
+      treeMarkersData: {
+        random: 0,
+        markers: [],
+      },
+      // 古树群面数据
+      treeClusterPolygonsData: {
+        random: 0,
+        polygons: [],
+      },
     };
   },
   mounted() {
@@ -259,8 +321,6 @@ export default {
       cachedTilesData: {},
       markersData: [], // 存储标记数据
       selectedAreaId: null, // 选中的区域ID
-      baseLayers: {},
-      currentBaseLayer: null,
       layerGroups: {}, // 存储图层组，key为layerId
       highlightedLayer: null, // 当前高亮的图层
       isDrawing: false, // 绘制模式
@@ -288,6 +348,11 @@ export default {
     receiveGeometry(newValue, oldValue, ownerVm, vm) {
       this.updateGeometry(newValue);
     },
+    receiveLayerType(newValue, oldValue, ownerVm, vm) {
+      if (newValue && mapInstance && this.baseLayers) {
+        this.setBaseLayer(newValue);
+      }
+    },
     receiveLocation(newValue, oldValue, ownerVm, vm) {
       if (newValue && newValue.lat && newValue.lng) {
         this.moveToLocation(newValue);
@@ -313,12 +378,42 @@ export default {
       if (newValue) {
         this.startDrawingMode();
       } else {
+        // 从绘制模式切换到非绘制模式时，先保存数据再停止
+        if (oldValue === true) {
+          const polygonData = this.getDrawnPolygon();
+          this.$ownerInstance.callMethod('savePolygonData', polygonData);
+        }
         this.stopDrawingMode();
       }
     },
     receiveUndoTrigger(newValue, oldValue, ownerVm, vm) {
       if (this.isDrawing) {
         this.undoLastDrawingPoint();
+      }
+    },
+    receiveClearTreeTrigger(newValue, oldValue, ownerVm, vm) {
+      console.log('receiveClearTreeTrigger 被调用:', newValue);
+      if (newValue && newValue.type) {
+        if (newValue.type === 'markers') {
+          this.clearTreeMarkers();
+        } else if (newValue.type === 'polygons') {
+          this.clearTreeClusterPolygons();
+        } else if (newValue.type === 'all') {
+          // 清除所有古树相关数据
+          console.log('准备清除所有古树数据');
+          this.clearTreeMarkers();
+          this.clearTreeClusterPolygons();
+        }
+      }
+    },
+    receiveTreeMarkersData(newValue, oldValue, ownerVm, vm) {
+      if (newValue && newValue.markers) {
+        this.addTreeMarkers(newValue.markers);
+      }
+    },
+    receiveTreeClusterPolygonsData(newValue, oldValue, ownerVm, vm) {
+      if (newValue && newValue.polygons) {
+        this.addTreeClusterPolygons(newValue.polygons);
       }
     },
     initMap() {
@@ -363,7 +458,7 @@ export default {
       }).setZIndex(2);
 
       // 设置初始图层
-      this.setBaseLayer("img");
+      this.setBaseLayer(this.layerType || "img");
 
       // 添加固定的注记图层
       this.annotationLayer.addTo(mapInstance);
@@ -386,7 +481,7 @@ export default {
       });
       officialScaleControl.addTo(mapInstance);
       officialScaleControl._container.style.left = "10px"
-      officialScaleControl._container.style.top = "50px"
+      officialScaleControl._container.style.top = "80px"
       officialScaleControl._container.style.marginLeft = "0"
 
       // 监听地图移动事件
@@ -901,13 +996,13 @@ export default {
 
       // 添加新的标记点
       markers.forEach(markerData => {
-        const { lat, lng, iconUrl, id, data } = markerData;
+        const { lat, lng, iconUrl, id, data, isPlot } = markerData;
 
         // 创建自定义图标
         const customIcon = L.icon({
           iconUrl: iconUrl,
-          iconSize: [30, 34], // 图标大小
-          iconAnchor: [16, 32], // 图标锚点（底部中心）
+          iconSize: [26, 28], // 图标大小
+          iconAnchor: [13, 14], // 图标锚点（底部中心）
           popupAnchor: [0, -32] // 弹窗锚点
         });
 
@@ -923,7 +1018,8 @@ export default {
             id,
             lat,
             lng,
-            data
+            data,
+            isPlot
           });
         });
 
@@ -939,9 +1035,13 @@ export default {
 
     // 清除古树标记点
     clearTreeMarkers() {
+      console.log('清除古树标记点');
       if (this.treeMarkersLayer) {
         this.treeMarkersLayer.clearLayers();
         this.treeMarkers = [];
+        console.log('古树标记点已清除');
+      } else {
+        console.log('古树标记点图层未初始化');
       }
     },
 
@@ -1030,31 +1130,23 @@ export default {
 
     // 清除古树群面
     clearTreeClusterPolygons() {
+      console.log('清除古树群面');
       if (this.treeClusterPolygonsLayer) {
         this.treeClusterPolygonsLayer.clearLayers();
         this.treeClusterPolygons = [];
         this.highlightedTreeClusterPolygon = null;
+        console.log('古树群面已清除');
+      } else {
+        console.log('古树群面图层未初始化');
       }
     }
   },
   watch: {
-    layerType(newVal) {
-      if (mapInstance && this.baseLayers) {
-        this.setBaseLayer(newVal);
-      }
-    },
     currentOperateLayer: {
       handler(newVal) {
         this.addOrRemoveLayer(newVal);
       },
       deep: true,
-    },
-    isDrawing(newVal, oldVal) {
-      // 当从绘制模式切换到非绘制模式时，同步多边形数据到父组件
-      if (oldVal === true && newVal === false) {
-        const polygonData = this.getDrawnPolygon();
-        this.$ownerInstance.callMethod('savePolygonData', polygonData);
-      }
     }
   }
 };
