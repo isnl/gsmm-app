@@ -395,25 +395,25 @@ export default {
       console.log('receiveClearTreeTrigger 被调用:', newValue);
       if (newValue && newValue.type) {
         if (newValue.type === 'markers') {
-          this.clearTreeMarkers();
+          this.renderClearTreeMarkers();
         } else if (newValue.type === 'polygons') {
-          this.clearTreeClusterPolygons();
+          this.renderClearTreeClusterPolygons();
         } else if (newValue.type === 'all') {
           // 清除所有古树相关数据
           console.log('准备清除所有古树数据');
-          this.clearTreeMarkers();
-          this.clearTreeClusterPolygons();
+          this.renderClearTreeMarkers();
+          this.renderClearTreeClusterPolygons();
         }
       }
     },
     receiveTreeMarkersData(newValue, oldValue, ownerVm, vm) {
       if (newValue && newValue.markers) {
-        this.addTreeMarkers(newValue.markers);
+        this.renderTreeMarkers(newValue.markers);
       }
     },
     receiveTreeClusterPolygonsData(newValue, oldValue, ownerVm, vm) {
       if (newValue && newValue.polygons) {
-        this.addTreeClusterPolygons(newValue.polygons);
+        this.renderTreeClusterPolygons(newValue.polygons);
       }
     },
     initMap() {
@@ -984,8 +984,8 @@ export default {
       }
     },
 
-    // 添加古树标记点
-    addTreeMarkers(markers) {
+    // 添加古树标记点（在 renderjs 中使用，重命名避免与 Vue 组件方法冲突）
+    renderTreeMarkers(markers) {
       if (!this.treeMarkersLayer) {
         return;
       }
@@ -1033,8 +1033,8 @@ export default {
       console.log(`已添加 ${markers.length} 个古树标记点`);
     },
 
-    // 清除古树标记点
-    clearTreeMarkers() {
+    // 清除古树标记点（在 renderjs 中使用，重命名避免与 Vue 组件方法冲突）
+    renderClearTreeMarkers() {
       console.log('清除古树标记点');
       if (this.treeMarkersLayer) {
         this.treeMarkersLayer.clearLayers();
@@ -1045,15 +1045,15 @@ export default {
       }
     },
 
-    // 添加古树群面数据
-    addTreeClusterPolygons(polygons) {
+    // 添加古树群面数据（在 renderjs 中使用，重命名避免与 Vue 组件方法冲突）
+    renderTreeClusterPolygons(polygons) {
       if (!this.treeClusterPolygonsLayer) {
         console.error('古树群面图层未初始化');
         return;
       }
 
       // 清空之前的图层
-      this.clearTreeClusterPolygons();
+      this.renderClearTreeClusterPolygons();
 
       polygons.forEach(polygonData => {
         const { id, geom, properties, color } = polygonData;
@@ -1128,8 +1128,8 @@ export default {
       console.log(`已添加 ${polygons.length} 个古树群面`);
     },
 
-    // 清除古树群面
-    clearTreeClusterPolygons() {
+    // 清除古树群面（在 renderjs 中使用，重命名避免与 Vue 组件方法冲突）
+    renderClearTreeClusterPolygons() {
       console.log('清除古树群面');
       if (this.treeClusterPolygonsLayer) {
         this.treeClusterPolygonsLayer.clearLayers();
